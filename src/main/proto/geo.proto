@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+service GeoService {
+  rpc getCountriesList(GeoRequest) returns (GeoResponse) {}
+  rpc getProvincesList(GeoRequest) returns (GeoResponse) {}
+  rpc getLocality(GeoRequest) returns (GeoResponse) {}
+  rpc getLocation(GeoRequest) returns (GeoResponse) {}
+}
+
+message GeoRequest {
+  string country = 1;
+  string province = 2;
+  string locality = 3;
+  string ip = 4;
+}
+
+message GeoResponse {
+  repeated string list = 1;
+}
