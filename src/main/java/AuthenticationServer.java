@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 public class AuthenticationServer {
     private static final Logger logger = Logger.getLogger(AuthenticationServer.class.getName());
-    private static final int PORT = 50051;
+    private static final int PORT = 51051;
     private Server server;
 
     public void start() throws IOException {

@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 public class GeoServer {
     private static final Logger logger = Logger.getLogger(GeoServer.class.getName());
-    private static final int PORT = 50051;
+    private static final int PORT = 51052;
     private Server server;
 
     public void start() throws IOException {
