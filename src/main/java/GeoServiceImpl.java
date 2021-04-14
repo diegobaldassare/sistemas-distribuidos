@@ -27,12 +27,26 @@ public class GeoServiceImpl extends GeoServiceGrpc.GeoServiceImplBase {
 
     @Override
     public void getProvincesList(Geo.GeoRequest request, StreamObserver<Geo.GeoResponse> responseObserver) {
-
+        String country = request.getCountry();
+        List<String> provinces = new ArrayList<>();
+        for (String[] data: locations) {
+            if (country.equals(data[1]) && !provinces.contains(data[2])) provinces.add(data[2]);
+        }
+        Geo.GeoResponse response = Geo.GeoResponse.newBuilder().addAllList(provinces).build();
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
 
     @Override
     public void getLocality(Geo.GeoRequest request, StreamObserver<Geo.GeoResponse> responseObserver) {
-
+        String province = request.getProvince();
+        List<String> localities = new ArrayList<>();
+        for (String[] data: locations) {
+            if (province.equals(data[2])) localities.add(data[0]);
+        }
+        Geo.GeoResponse response = Geo.GeoResponse.newBuilder().addAllList(localities).build();
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
 
     @Override

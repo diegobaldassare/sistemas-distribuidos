@@ -19,11 +19,43 @@ public class GeoClient {
         Geo.GeoResponse response;
         try {
             response = blockingStub.getCountriesList(request);
+            System.out.println("Countries count: " + response.getListList().size());
             System.out.println("Countries: " + response.getListList().toString());
         } catch (StatusRuntimeException e) {
             e.printStackTrace();
         }
     }
+
+    public void getProvincesList() {
+        Geo.GeoRequest request = Geo.GeoRequest
+                .newBuilder()
+                .setCountry("Argentina")
+                .build();
+        Geo.GeoResponse response;
+        try {
+            response = blockingStub.getProvincesList(request);
+            System.out.println("Provinces count: " + response.getListList().size());
+            System.out.println("Provinces: " + response.getListList().toString());
+        } catch (StatusRuntimeException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getLocality() {
+        Geo.GeoRequest request = Geo.GeoRequest
+                .newBuilder()
+                .setProvince("Buenos Aires")
+                .build();
+        Geo.GeoResponse response;
+        try {
+            response = blockingStub.getLocality(request);
+            System.out.println("Localities count: " + response.getListList().size());
+            System.out.println("Localities: " + response.getListList().toString());
+        } catch (StatusRuntimeException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Greet server. If provided, the first element of {@code args} is the name to use in the
@@ -54,6 +86,8 @@ public class GeoClient {
         try {
             GeoClient client = new GeoClient(channel);
             client.getCountriesList();
+            client.getProvincesList();
+            client.getLocality();
         } finally {
             // ManagedChannels use resources like threads and TCP connections. To prevent leaking these
             // resources the channel should be shut down when it will no longer be used. If it may be used
