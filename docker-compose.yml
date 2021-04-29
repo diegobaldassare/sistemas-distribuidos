@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+
+  servers:
+    image: grpc-servers
+    container_name: "servers"
+    build:
+      context: ./
+      dockerfile: tools/Dockerfile
+
+  auth:
+    image: grpc-auth-server
+    container_name: "auth_server"
+    depends_on:
+      - servers
+    build:
+      context: ./
+      dockerfile: tools/auth/Dockerfile
+    ports:
+      - "51051:51051"
+
+  geo:
+    image: grpc-geo-server
+    container_name: "geo_server"
+    depends_on:
+      - servers
+    build:
+      context: ./
+      dockerfile: tools/geo/Dockerfile
+    ports:
+      - "51052:51052"
+
+networks:
+  default:
+    external:
+      name: custom_network

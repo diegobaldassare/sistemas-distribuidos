@@ -56,3 +56,13 @@ sourceSets {
         }
     }
 }
+
+task authentication(type:JavaExec) {
+    main = "AuthenticationServer"
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task geo(type:JavaExec) {
+    main = "GeoServer"
+    classpath = sourceSets.main.runtimeClasspath
+}
