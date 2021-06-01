@@ -1,19 +1,43 @@
 syntax = "proto3";
 
+package geo;
+
 service GeoService {
-  rpc getCountriesList(GeoRequest) returns (GeoResponse) {}
-  rpc getProvincesList(GeoRequest) returns (GeoResponse) {}
-  rpc getLocality(GeoRequest) returns (GeoResponse) {}
-  rpc getLocation(GeoRequest) returns (GeoResponse) {}
+  rpc ListCountries(ListCountriesRequest) returns (ListCountriesResponse) {}
+  rpc ListProvinces(ListProvincesRequest) returns (ListProvincesResponse) {}
+  rpc ListLocalities(ListLocalitiesRequest) returns (ListLocalitiesResponse) {}
+  rpc GetLocation(GetLocationRequest) returns (GetLocationResponse) {}
 }
 
-message GeoRequest {
+message ListCountriesRequest {}
+
+message ListCountriesResponse {
+  repeated string countries = 1;
+}
+
+message ListProvincesRequest {
+  string country = 1;
+}
+
+message ListProvincesResponse {
+  repeated string provinces = 1;
+}
+
+message ListLocalitiesRequest {
   string country = 1;
   string province = 2;
-  string locality = 3;
-  string ip = 4;
 }
 
-message GeoResponse {
-  repeated string list = 1;
+message ListLocalitiesResponse {
+  repeated string localities = 1;
+}
+
+message GetLocationRequest {
+  string ip = 1;
+}
+
+message GetLocationResponse {
+  string country = 1;
+  optional string province = 2;
+  optional string locality = 3;
 }

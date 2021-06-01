@@ -1,7 +1,7 @@
 # Sistemas Distribuidos 2021
+- - -
 ### Requerimientos
 * Docker
-
 ### Correr
 #####Si es la primera vez:
 * `docker network create custom_network` => Crea una red para que se comuniquen los servicios
