@@ -1,7 +1,10 @@
 package services.geo;
 
 import geo.Geo.*;
+import geo.GeoServiceGrpc;
 import geo.GeoServiceGrpc.*;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
@@ -12,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.*;
 
 public class GeoService extends GeoServiceImplBase {
@@ -19,7 +23,35 @@ public class GeoService extends GeoServiceImplBase {
     private final List<Location> locations = new ArrayList<>();
     private final Map<GetLocationRequest, GetLocationResponse> cache = new HashMap<>();
 
+    Boolean isLeader = true;
+    String leaderIp;
+    GeoServiceGrpc.GeoServiceStub leaderStub = createStub(leaderIp, 50000);
+
+    public void setLeader(Boolean b, String ip) {
+        isLeader = b;
+        leaderIp = ip;
+        System.out.println("Set Leader " + leaderIp + ": " + isLeader);
+        if (!isLeader)
+            leaderStub = createStub(leaderIp, 50000);
+    }
+
+    GeoServiceGrpc.GeoServiceStub createStub(String ip, int port) {
+        ManagedChannelBuilder builder = ManagedChannelBuilder.forAddress(ip, port);
+        builder.usePlaintext();
+        ManagedChannel channel = builder.build();
+        return GeoServiceGrpc.newStub(channel);
+    }
+
     GeoService() {
+        loadLocations();
+    }
+
+    public GeoService(Duration cacheLeaseTime) {
+        String cacheURL = "memcached:11211";
+        loadLocations();
+    }
+
+    public GeoService(String cacheURL, Duration cacheLeaseTime) {
         loadLocations();
     }
 
@@ -119,5 +151,7 @@ public class GeoService extends GeoServiceImplBase {
             e.printStackTrace();
         }
     }
+
+
 
 }

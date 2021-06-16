@@ -31,6 +31,9 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
 
+    // https://mvnrepository.com/artifact/io.etcd/jetcd-core
+    implementation group: 'io.etcd', name: 'jetcd-core', version: '0.5.7'
+
     runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
 
     testImplementation "io.grpc:grpc-testing:${grpcVersion}"
