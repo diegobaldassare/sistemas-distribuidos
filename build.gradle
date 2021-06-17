@@ -36,6 +36,9 @@ dependencies {
 
     runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
 
+    // https://mvnrepository.com/artifact/net.spy/spymemcached
+    implementation group: 'net.spy', name: 'spymemcached', version: '2.12.3'
+
     testImplementation "io.grpc:grpc-testing:${grpcVersion}"
     testImplementation "junit:junit:4.12"
     testImplementation "org.mockito:mockito-core:3.4.0"

@@ -6,6 +6,7 @@ import geo.GeoServiceGrpc.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
+import net.spy.memcached.MemcachedClient;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import services.geo.util.Location;
@@ -22,7 +23,7 @@ public class GeoService extends GeoServiceImplBase {
 
     private final List<Location> locations = new ArrayList<>();
     private final Map<GetLocationRequest, GetLocationResponse> cache = new HashMap<>();
-
+    Duration cacheLeaseTime;
     Boolean isLeader = true;
     String leaderIp;
     GeoServiceGrpc.GeoServiceStub leaderStub = createStub(leaderIp, 50000);
@@ -48,6 +49,7 @@ public class GeoService extends GeoServiceImplBase {
 
     public GeoService(Duration cacheLeaseTime) {
         String cacheURL = "memcached:11211";
+        this.cacheLeaseTime = cacheLeaseTime;
         loadLocations();
     }
 
@@ -116,12 +118,16 @@ public class GeoService extends GeoServiceImplBase {
     }
 
     private GetLocationResponse ipServiceResponse(GetLocationRequest request) throws IOException {
+
+        MemcachedClient memcached = new MemcachedClient();
+
         String requestIP = request.getIp();
         String province;
         String country;
         JSONObject json = new JSONObject(IOUtils.toString(
                 new URL("https://ipapi.co/" + requestIP + "/json/"), StandardCharsets.UTF_8)
         );
+        memcached.add(leaderIp, memcached.get(leaderIp).hashCode(), cacheLeaseTime); //5 minutes
         province = json.getString("region");
         country = json.getString("country_name");
         GetLocationResponse response = GetLocationResponse.newBuilder()
