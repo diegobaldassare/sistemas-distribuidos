@@ -4,6 +4,7 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -22,6 +23,7 @@ public class GeoServer {
                 .build()
                 .start();
 
+        logger.info("Server started on ip: " + InetAddress.getLocalHost().getHostAddress());
         logger.info("Server started on port: " + PORT);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.err.println("*** shutting down gRPC server since JVM is shutting down");
