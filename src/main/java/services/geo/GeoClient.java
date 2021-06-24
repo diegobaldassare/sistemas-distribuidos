@@ -6,6 +6,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 
+import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -90,7 +91,7 @@ public class GeoClient {
     }
 
     public static void main(String[] args) throws Exception {
-        String serviceIP = "127.0.0.1";
+        String serviceIP = InetAddress.getLocalHost().getHostAddress();
         List<String> testingIPs = Arrays.asList(
                 "8.8.8.8",
                 "1.1.1.1"

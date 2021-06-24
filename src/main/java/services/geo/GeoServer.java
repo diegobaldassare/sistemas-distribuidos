@@ -11,6 +11,7 @@ import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -59,6 +60,7 @@ public class GeoServer {
                 .build()
                 .start();
 
+        logger.info("Server started on ip: " + InetAddress.getLocalHost().getHostAddress());
         logger.info("Server started on port: " + PORT);
         server.awaitTermination();
 

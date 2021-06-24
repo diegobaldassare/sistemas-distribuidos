@@ -14,6 +14,7 @@ import services.geo.util.Location;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -140,7 +141,7 @@ public class GeoService extends GeoServiceImplBase {
     private void loadLocations() {
         BufferedReader csvReader;
         try {
-            csvReader = new BufferedReader(new FileReader("src/main/resources/world-cities.csv"));
+            csvReader = new BufferedReader(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream("world-cities.csv")));
             String row;
             while ((row = csvReader.readLine()) != null) {
                 String[] data = row.split(",");

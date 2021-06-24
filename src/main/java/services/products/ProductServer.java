@@ -1,4 +1,4 @@
-package services.auth;
+package services.products;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -8,9 +8,9 @@ import java.net.InetAddress;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public class AuthServer {
-    private static final Logger logger = Logger.getLogger(AuthServer.class.getName());
-    private static final int PORT = 51051; // TODO Should the port be a static final and defined attribute?
+public class ProductServer {
+    private static final Logger logger = Logger.getLogger(ProductServer.class.getName());
+    private static final int PORT = 51052; //TODO should server port be a static final attribute?
     private Server server;
 
     public static int getPORT() {
@@ -19,7 +19,7 @@ public class AuthServer {
 
     public void start() throws IOException {
         server = ServerBuilder.forPort(PORT)
-                .addService(new AuthService())
+                .addService(new ProductService())
                 .build()
                 .start();
 
@@ -28,7 +28,7 @@ public class AuthServer {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.err.println("*** shutting down gRPC server since JVM is shutting down");
             try {
-                AuthServer.this.stop();
+                ProductServer.this.stop();
             } catch (InterruptedException e) {
                 e.printStackTrace(System.err);
             }
@@ -49,7 +49,7 @@ public class AuthServer {
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        final AuthServer server = new AuthServer();
+        final ProductServer server = new ProductServer();
         server.start();
         server.blockUntilShutdown();
     }

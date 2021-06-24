@@ -26,45 +26,87 @@ services:
     image: 'bitnami/memcached:1.6.9'
     networks:
       - app-network
-    ports:
-      - 11211:11211
-#
-#  # Run 'sbt docker:publishLocal' to generate these images
-#
-#  helloserver1:
-#    image: 'scalapb-demo:0.1.0-SNAPSHOT'
-#    entrypoint: '/opt/docker/bin/hello-world-server'
+
+  authserver1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SERVICE_NAME=auth-server
+    depends_on:
+      - etcd
+      - memcached
+    networks:
+      - app-network
+
+  authserver2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SERVICE_NAME=auth-server
+    depends_on:
+      - etcd
+      - memcached
+    networks:
+      - app-network
+
+  geoserver1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SERVICE_NAME=geo-server
+    depends_on:
+      - etcd
+      - memcached
+    networks:
+      - app-network
+
+  geoserver2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SERVICE_NAME=geo-server
+    depends_on:
+      - etcd
+      - memcached
+    networks:
+      - app-network
+
+  authclient:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SERVICE_NAME=auth-client
+    depends_on:
+      - etcd
+      - authserver1
+      - authserver2
+    networks:
+      - app-network
+
+  geoclient:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SERVICE_NAME=geo-client
+    depends_on:
+      - etcd
+      - geoserver1
+      - geoserver2
+    networks:
+      - app-network
+
+#  etcd-client:
+#    image: 'distribuidos:0.1.0'
+#    # entrypoint: '/opt/docker/bin/etcd-demo'
+#    command: sh -c "gradle etcd"
 #    depends_on:
 #      - etcd
 #      - memcached
 #    networks:
 #      - app-network
-#
-#  helloserver2:
-#    image: 'scalapb-demo:0.1.0-SNAPSHOT'
-#    entrypoint: '/opt/docker/bin/hello-world-server'
-#    depends_on:
-#      - etcd
-#      - memcached
-#    networks:
-#      - app-network
-#
-#  client:
-#    image: 'scalapb-demo:0.1.0-SNAPSHOT'
-#    entrypoint: '/opt/docker/bin/client-demo'
-#    depends_on:
-#      - etcd
-#      - helloserver1
-#      - helloserver2
-#    networks:
-#      - app-network
-#
-#  etcd-demo:
-#    image: 'scalapb-demo:0.1.0-SNAPSHOT'
-#    entrypoint: '/opt/docker/bin/etcd-demo'
-#    depends_on:
-#      - etcd
-#      - memcached
-#    networks:
-#      - app-network
-#

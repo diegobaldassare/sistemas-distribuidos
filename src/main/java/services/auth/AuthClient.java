@@ -7,6 +7,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -45,7 +46,7 @@ public class AuthClient {
     }
 
     public static void main(String[] args) throws Exception {
-        String ip = "127.0.0.1"; //TODO Should ip value be hardcoded?
+        String ip = InetAddress.getLocalHost().getHostAddress();
         ManagedChannel[] channels = new ManagedChannel[]{createChannel(ip, AuthServer.getPORT())};
         AuthClient client = new AuthClient(channels);
         try {
