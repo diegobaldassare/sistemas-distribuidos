@@ -4,7 +4,7 @@ package products;
 
 service ProductService {
   rpc ListProducts(EmptyRequest) returns (ListProductsResponse) {}
-  rpc GetProductById(GetProductRequest) returns (GetProductResponse) {}
+  rpc GetProduct(GetProductRequest) returns (GetProductResponse) {}
 }
 
 message EmptyRequest {}
@@ -18,7 +18,7 @@ message GetProductRequest {
 }
 
 message GetProductResponse {
-  repeated string productId = 1;
-  repeated string productName = 2;
-  repeated string productPrice = 3;
+  string productId = 1;
+  optional string productName = 2;
+  optional string productPrice = 3;
 }

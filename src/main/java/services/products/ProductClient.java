@@ -36,10 +36,10 @@ public class ProductClient {
 
     private void getProduct(GetProductRequest request) {
         try {
-            GetProductResponse response = randomStub().getProductById(request);
-            System.out.println("Product id: " + response.getProductId(1));
-            System.out.println("Product name: " + response.getProductName(2));
-            System.out.println("Product price: " + response.getProductPrice(3));
+            GetProductResponse response = randomStub().getProduct(request);
+            System.out.println("Product: " + response.getProductId());
+            System.out.println("Product name: " + response.getProductName());
+            System.out.println("Product price: " + response.getProductPrice());
             System.out.println("***");
         } catch (StatusRuntimeException e) {
             e.printStackTrace();
@@ -72,6 +72,7 @@ public class ProductClient {
         ManagedChannel[] channels = new ManagedChannel[]{createChannel(serviceIP, ProductServer.getPORT())};
         ProductClient client = new ProductClient(channels);
         try {
+            client.listProducts(EmptyRequest.newBuilder().build());
             client.getProduct(testingIds);
         } finally {
             for (ManagedChannel c : channels) {

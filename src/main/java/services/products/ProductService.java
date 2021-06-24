@@ -1,6 +1,5 @@
 package services.products;
 
-import com.google.protobuf.Descriptors;
 import io.grpc.stub.StreamObserver;
 import products.ProductServiceGrpc;
 import products.Products.*;
@@ -29,7 +28,7 @@ public class ProductService extends ProductServiceGrpc.ProductServiceImplBase {
 
     @Override
     public void listProducts(EmptyRequest request, StreamObserver<ListProductsResponse> responseObserver) {
-        Set<String> result = new HashSet<>();
+        List<String> result = new ArrayList<>();
         for (Product p : products) {
             String product = p.toString();
             result.add(product);
@@ -40,17 +39,17 @@ public class ProductService extends ProductServiceGrpc.ProductServiceImplBase {
     }
 
     @Override
-    public void getProductById(GetProductRequest request, StreamObserver<GetProductResponse> responseObserver) {
+    public void getProduct(GetProductRequest request, StreamObserver<GetProductResponse> responseObserver) {
         if (cache.containsKey(request)) {
             GetProductResponse response = cache.get(request);
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } else {
-            Product product = products.get(Integer.getInteger(request.getProductId()));
+            Product product = products.get(Integer.parseInt(request.getProductId()));
             GetProductResponse response = GetProductResponse.newBuilder()
-                    .setProductId(1, product.getId())
-                    .setProductName(2, product.getName())
-                    .setProductPrice(3, product.getPrice())
+                    .setProductId(product.getId())
+                    .setProductName(product.getName())
+                    .setProductPrice(product.getPrice())
                     .build();
             cache.put(request, response);
             responseObserver.onNext(response);
